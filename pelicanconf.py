@@ -20,7 +20,7 @@ CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 
 #specific
-THEME = 'support/themes/tufte'
+THEME = 'support/themes/cs171'
 BOOTSTRAP_THEME = None
 TWITTER_USERNAME="Author"
 

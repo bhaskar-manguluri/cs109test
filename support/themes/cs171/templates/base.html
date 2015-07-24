@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="https://www.facebook.com/2008/fbml">
+<head>
+    <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Baumans' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <!-- Open Graph tags -->
+    {% if USE_OPEN_GRAPH is not defined %}
+        {% set USE_OPEN_GRAPH = True %}
+    {% endif %}
+
+    {% if USE_OPEN_GRAPH %}
+        {% if OPEN_GRAPH_FB_APP_ID %}
+            <meta property="fb:app_id" content="{{ OPEN_GRAPH_FB_APP_ID }}"/>
+        {% endif %}
+        {% if article %}
+            <meta property="og:type" content="article"/>
+            <meta property="og:title" content="{{ article.title|striptags }}"/>
+            <meta property="og:url" content="{{ SITEURL }}/{{ article.url }}"/>
+            <meta property="og:description" content="{{ article.summary|striptags }}"/>
+        {% elif page %}
+            <meta property="og:type" content="article"/>
+            <meta property="og:title" content="{{ page.title }}"/>
+            <meta property="og:url" content="{{ SITEURL }}/{{ page.url }}"/>
+        {% else %}
+            <meta property="og:type" content="website"/>
+            <meta property="og:title" content="{{ SITENAME }}"/>
+            <meta property="og:url" content="{{ SITEURL }}"/>
+            <meta property="og:description" content="{{ SITENAME }}"/>
+            {% if OPEN_GRAPH_IMAGE %}
+            <meta property="og:image"
+                  content="{{ SITEURL }}/static/{{ OPEN_GRAPH_IMAGE }}"/>
+        {% endif %}
+        {% endif %}
+
+    {% endif %}
+
+    <link rel="stylesheet" href="{{ SITEURL }}/theme/css/cs171.css" type="text/css"/>
+    <link href="{{ SITEURL }}/theme/css/font-awesome.min.css" rel="stylesheet">
+    {% if DOCUTIL_CSS %}
+        <link href="{{ SITEURL }}/theme/css/html4css1.css" rel="stylesheet">
+    {% endif %}
+    <!-- JavaScript plugins (requires jQuery) -->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+    {% if FEED_ALL_ATOM %}
+        <link href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate"
+              title="{{ SITENAME }} ATOM Feed"/>
+    {% endif %}
+    {% if FEED_ALL_RSS %}
+        <link href="{{ SITEURL }}/{{ FEED_ALL_RSS }}" type="application/atom+xml" rel="alternate"
+              title="{{ SITENAME }} RSS Feed"/>
+    {% endif %}
+    {% if article and article.latex %}
+        {{ article.latex }}
+    {% endif %}
+
+    {% if EXTRA_HEADER %}
+        {{ EXTRA_HEADER }}
+    {% endif %}
+    {% include 'includes/ga.html' %}
+
+
+
+</head>
+<body>
+  <header class="site-header">
+
+  <div class="wrap">
+
+    <span><a class="site-title" href="/2015/">{{CLASS_NUMBER}} - {{ FULL_SITE }}</a></span>
+
+    <span id="seasLogo"></span>
+  </div>
+
+  <div class="wrap">
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        {% for title, link in MENUITEMS %}
+            <a class="page-link" href="{{ link }}">{{ title }}</a>
+        {% endfor %}
+        {% if DISPLAY_PAGES_ON_MENU %}
+            {% for page in PAGES %}
+                <a class="page-link" href="{{ SITEURL }}/{{ page.url }}">{{ page.title }}</a>
+            {% endfor %}
+        {% endif %}
+        {% if DISPLAY_CATEGORIES_ON_MENU %}
+            {% for cat, null in categories %}
+                <a class="page-link" href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a>
+            {% endfor %}
+        {% endif %}
+        {% for tag, null in tags %}
+             <a class="page-link" href="{{ SITEURL }}/{{ tag.url }}">
+                 {{ tag }}
+             </a>
+        {% endfor %}
+
+
+
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+<div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+<!-- /.navbar -->
+<article>
+    {% block content %}
+    {% endblock %}
+</article>
+</div>
+</div>
+</div>
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="{{ SITEURL }}/theme/js/respond.min.js"></script>
+{% include 'includes/disqus_script.html' %}
+</body>
+</html>
